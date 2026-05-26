@@ -1,3 +1,5 @@
+// ===== PROJETO LABIRINTO ===== //
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -8,9 +10,12 @@ public class Main {
         Random random = new Random();
         boolean querJogarNoVamente = true;
 
-        // BANCO DE MAPAS (Três labirintos complexos e diferentes de tamanho 11x7)
+
+        //PRIMEIRA PARTE:
+
+        // Matriz tridimensional usada para armazenar 3 mapas bidimensionais de tamanho 11x7)
         char[][][] bancoDeMapas = {
-                // Mapa 1 (O mapa atual que você já conhece)
+                // Mapa 1 (O mapa atual)
                 {
                         {'#', '#', '#', '#', '#', '#', '#'},
                         {'#', 'P', ' ', ' ', '#', ' ', '#'},
@@ -24,7 +29,7 @@ public class Main {
                         {'#', ' ', '#', ' ', ' ', ' ', '#'},
                         {'#', '#', '#', 'S', '#', '#', '#'}
                 },
-                // Mapa 2 (Inverte o fluxo, força caminhos pelas laterais)
+                // Mapa 2
                 {
                         {'#', '#', '#', '#', '#', '#', '#'},
                         {'#', 'P', ' ', ' ', ' ', ' ', '#'},
@@ -36,9 +41,9 @@ public class Main {
                         {'#', ' ', ' ', ' ', '#', ' ', '#'},
                         {'#', ' ', '#', ' ', '#', ' ', '#'},
                         {'#', ' ', '#', ' ', ' ', ' ', '#'},
-                        {'#', '#', '#', ' ', 'S', '#', '#'} // Saída em coluna diferente
+                        {'#', '#', '#', ' ', 'S', '#', '#'}
                 },
-                // Mapa 3 (Caminho em formato de "Sigal" / zigue-zague vertical)
+                // Mapa 3
                 {
                         {'#', '#', '#', '#', '#', '#', '#'},
                         {'#', 'P', '#', ' ', ' ', ' ', '#'},
@@ -50,26 +55,29 @@ public class Main {
                         {'#', ' ', '#', '#', '#', '#', '#'},
                         {'#', ' ', ' ', ' ', ' ', ' ', '#'},
                         {'#', '#', '#', '#', '#', ' ', '#'},
-                        {'#', ' ', 'S', ' ', ' ', ' ', '#'} // Saída deslocada
+                        {'#', ' ', 'S', ' ', ' ', ' ', '#'}
                 }
         };
 
-        // LOOP EXTERNO: Controla se o jogador quer jogar uma nova partida
+        // Primeiro Loop: Controla se o jogador quer jogar uma nova partida
         while (querJogarNoVamente) {
 
-            // --- PASSO 1: RANDOMIZAR O MAPA ---
+            // --- Passo 1: Aqui irá randomizar os mapas ---
             // Sorteia um índice de 0 até o tamanho do banco de mapas menos 1
             int mapaSorteado = random.nextInt(bancoDeMapas.length);
 
-            // Criamos uma cópia do mapa sorteado para não estragar o mapa original do banco
+            // Cópia criada do mapa em que se encontra o jogador.
             char[][] labirinto = new char[11][7];
             for (int i = 0; i < 11; i++) {
                 for (int j = 0; j < 7; j++) {
                     labirinto[i][j] = bancoDeMapas[mapaSorteado][i][j];
                 }
             }
+            //--------------------------------------------------------------------------------------------//
 
-            // --- PASSO 2: ENCONTRAR O JOGADOR DE FORMA DINÂMICA ---
+                //SEGUNDA PARTE:
+
+            // --- Passo 2: Aqui encontra o jogador de forma dinâmica ---
             // Como o mapa muda, precisamos varrer a matriz no início para achar onde o 'P' foi colocado
             int linhaAtual = 1;
             int colunaAtual = 1;
@@ -87,10 +95,11 @@ public class Main {
             System.out.println("\n=== NOVO LABIRINTO GERADO (Mapa Tipo " + (mapaSorteado + 1) + ") ===");
             System.out.println("Encontre a saída 'S'!");
 
-            // LOOP INTERNO: O jogo em si (Game Loop clássico)
+            // Segundo Loop: O jogo em si
             while (!ganhou) {
 
-                // --- PASSO A: DESENHAR O TABULEIRO ---
+                // --- Passo A1: Desenho do tabuleiro!! ---
+                //Aqui é onde será exibido no terminal toda a estrutura do labirinto
                 System.out.println("\n-----------------");
                 for (int i = 0; i < labirinto.length; i++) {
                     for (int j = 0; j < labirinto[i].length; j++) {
@@ -99,15 +108,18 @@ public class Main {
                     System.out.println();
                 }
                 System.out.println("-----------------");
+                //--------------------------------------------------------------------------------------------------------------//
 
-                // --- PASSO B: RECEBER O COMANDO DO JOGADOR ---
+                 //TERCEIRA PARTE:
+
+                // --- Passo B1: Aqui recebe o comando do jogador ---
                 System.out.print("Sua jogada (W/A/S/D): ");
                 char comando = scanner.next().toLowerCase().charAt(0);
 
                 int proximaLinha = linhaAtual;
                 int proximaColuna = colunaAtual;
 
-                // --- PASSO C: CALCULAR A NOVA POSIÇÃO ---
+                // --- Passo 3: Calculando a nova Posição do Jogador! ---
                 if (comando == 'w') {
                     proximaLinha--;
                 } else if (comando == 's') {
@@ -120,33 +132,36 @@ public class Main {
                     System.out.println("Comando inválido! Use apenas W, A, S ou D.");
                     continue;
                 }
+                //----------------------------------------------------------------------------------------------
 
-                // --- PASSO D: VALIDAÇÃO DO MOVIMENTO e COLISÃO ---
+                //QUARTA PARTE:
+
+                // --- Passo 4: Validando a movimentação e a colisão: ---
                 char destino = labirinto[proximaLinha][proximaColuna];
 
                 if (destino == '#') {
                     System.out.println("Bateu na parede! Tente outro caminho.");
                 } else if (destino == 'S') {
                     labirinto[linhaAtual][colunaAtual] = ' ';
-                    labirinto[proximaLinha][proximaColuna] = 'P';
+                    labirinto[proximaLinha][proximaColuna] = 'P'; //Aqui atualiza a posição do jogador na Saída
                     ganhou = true;
                 } else {
                     labirinto[linhaAtual][colunaAtual] = ' ';
                     linhaAtual = proximaLinha;
                     colunaAtual = proximaColuna;
-                    labirinto[linhaAtual][colunaAtual] = 'P';
+                    labirinto[linhaAtual][colunaAtual] = 'P'; // Atualiza a nova posição do jogador no caminho livre
                 }
             }
 
-            // --- FIM DA RODADA ATUAL ---
+            // --- Fim da Partida ---
             System.out.println("\nPARABÉNS! Você escapou deste labirinto!");
 
-            // --- PERGUNTA AO JOGADOR SE ELE DESEJA CONTINUAR ---
+            // --- Essa parte é responsável para perguntar ao usuário se quer começar de novo ---
             System.out.print("\nDeseja jogar novamente em um mapa diferente? (S/N): ");
             char resposta = scanner.next().toLowerCase().charAt(0);
 
             if (resposta != 's') {
-                querJogarNoVamente = false; // Quebra o laço externo e finaliza o programa
+                querJogarNoVamente = false; // Aqui encerra a programação, pois se for diferente de S, o jogo termina
                 System.out.println("\nObrigado por jogar! Até a próxima.");
             }
         }
