@@ -16,6 +16,11 @@ public class Main {
         Random random = new Random();
         boolean querJogarNovamente = true;
 
+
+        // PRIMEIRA PARTE:
+        // Criação do banco de mapas e armazenamento dos labirintos
+
+
         // Matriz tridimensional usada para armazenar 3 mapas bidimensionais (11x7)
         char[][][] bancoDeMapas = {
 
@@ -46,7 +51,7 @@ public class Main {
                         {'#', ' ', ' ', ' ', '#', ' ', '#'},
                         {'#', ' ', '#', ' ', '#', ' ', '#'},
                         {'#', ' ', '#', ' ', ' ', ' ', '#'},
-                        {'#', '#', '#', ' ', 'S', '#', '#'}
+                        {'#', '#', '#', '#', 'S', '#', '#'}
                 },
 
                 // Mapa 3
@@ -64,6 +69,9 @@ public class Main {
                         {'#', ' ', 'S', ' ', ' ', ' ', '#'}
                 }
         };
+
+
+                //Primeiro Loop: Pergunta se o jogador quer recomeçar o jogo ou não!
 
         while (querJogarNovamente) {
 
@@ -90,6 +98,8 @@ public class Main {
         scanner.close();
     }
 
+
+        //PARTE DOIS:
     // Faz uma cópia do mapa sorteado
     public static char[][] copiarMapa(char[][] mapaOriginal) {
 
@@ -103,6 +113,8 @@ public class Main {
 
         return copia;
     }
+
+
 
     // Procura a posição inicial do jogador
     public static int[] encontrarJogador(char[][] labirinto) {
@@ -119,6 +131,8 @@ public class Main {
         return new int[]{1, 1};
     }
 
+
+
     // Exibe o labirinto no terminal
     public static void desenharLabirinto(char[][] labirinto) {
 
@@ -134,7 +148,10 @@ public class Main {
         System.out.println("-----------------");
     }
 
-    // Controla uma partida completa
+
+        //PARTE TRÊS:
+    // Função para verificar a jogada do jogador, se bateu na parede, se
+    //andou numa posição vazia e se chegou em S
     public static void jogarPartida(char[][] labirinto, Scanner scanner) {
 
         int[] posicao = encontrarJogador(labirinto);
@@ -158,7 +175,7 @@ public class Main {
                 proximaLinha--;
             } else if (comando == 's') {
                 proximaLinha++;
-            } else if (comando == 'a') {
+            } else if (comando == 'a') {          //Verifica qual jogada o jogador fez
                 proximaColuna--;
             } else if (comando == 'd') {
                 proximaColuna++;
@@ -167,6 +184,9 @@ public class Main {
                 continue;
             }
 
+
+                //PARTE QUATRO:
+            //Verifica se o jogador andou nas posições corretas e substitui a posição atual por "P"
             char destino = labirinto[proximaLinha][proximaColuna];
 
             if (destino == '#') {
@@ -178,7 +198,7 @@ public class Main {
                 labirinto[linhaAtual][colunaAtual] = ' ';
                 labirinto[proximaLinha][proximaColuna] = 'P';
 
-                ganhou = true;
+                ganhou = true;     //Caso jogador chegue em S, a saída será substituída por "P"
 
             } else {
 
@@ -187,7 +207,7 @@ public class Main {
                 linhaAtual = proximaLinha;
                 colunaAtual = proximaColuna;
 
-                labirinto[linhaAtual][colunaAtual] = 'P';
+                labirinto[linhaAtual][colunaAtual] = 'P';  //Caso jogador ande numa posição vazia, a posição atual será "P"
             }
         }
     }
