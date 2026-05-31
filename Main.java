@@ -12,7 +12,7 @@ public class Main {
 
         while (executando) {
             exibirMenu();
-            System.out.println("Escolha  uma opção");
+            System.out.println("Escolha uma opção");
             String entrada = scanner.next().trim();
 
             int opcao;
