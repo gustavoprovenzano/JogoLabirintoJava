@@ -6,13 +6,64 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        executarJogo();
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        boolean executando = true;
+
+        while (executando) {
+            exibirMenu();
+            System.out.println("Escolha  uma opção");
+            String entrada = scanner.next().trim();
+
+            int opcao;
+            try {
+                opcao = Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida! Digite 1, 2 ou 3.");
+                continue;
+            }
+
+            switch (opcao) {
+                case 1:
+                    executarJogo(scanner);
+                    break;
+                case 2:
+                    exibirRegras();
+                    break;
+                case 3:
+                    System.out.println("\nObrigado por jogar! Até a próxima.");
+                    executando = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida! Escolha 1, 2 ou 3.");
+            }
+        }
+
+        scanner.close();
+    }
+    // FUNCAO EXIBIR MENU
+    public static void exibirMenu() {
+    System.out.println("\n╔══════════════════════════╗");
+    System.out.println("║     JOGO DO LABIRINTO    ║");
+    System.out.println("╠══════════════════════════╣");
+    System.out.println("║  1. Jogar                ║");
+    System.out.println("║  2. Regras               ║");
+    System.out.println("║  3. Sair                 ║");
+    System.out.println("╚══════════════════════════╝");
+    }
+    //FUNCAO EXIBIR REGRA
+    public static void exibirRegras() {
+    System.out.println("\n=== REGRAS DO JOGO ===");
+    System.out.println("- Você é o 'P' no labirinto.");
+    System.out.println("- Encontre a saída marcada com 'S'.");
+    System.out.println("- Use W (cima), A (esquerda), S (baixo), D (direita).");
+    System.out.println("- '#' são paredes — não dá para atravessar!");
+    System.out.println("- Um mapa diferente é sorteado a cada partida.");
+    System.out.println("======================");
     }
 
     // Função principal responsável por controlar o jogo
-    public static void executarJogo() {
-
-        Scanner scanner = new Scanner(System.in);
+    public static void executarJogo(Scanner scanner) {
         Random random = new Random();
         boolean querJogarNovamente = true;
 
@@ -94,12 +145,9 @@ public class Main {
                 System.out.println("\nObrigado por jogar! Até a próxima.");
             }
         }
-
-        scanner.close();
     }
 
-
-        //PARTE DOIS:
+    //PARTE DOIS:
     // Faz uma cópia do mapa sorteado
     public static char[][] copiarMapa(char[][] mapaOriginal) {
 
@@ -149,7 +197,7 @@ public class Main {
     }
 
 
-        //PARTE TRÊS:
+    //PARTE TRÊS:
     // Função para verificar a jogada do jogador, se bateu na parede, se
     //andou numa posição vazia e se chegou em S
     public static void jogarPartida(char[][] labirinto, Scanner scanner) {
