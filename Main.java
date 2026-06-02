@@ -182,13 +182,26 @@ public class Main {
 
 
     // Exibe o labirinto no terminal
-    public static void desenharLabirinto(char[][] labirinto) {
-
+    public static void desenharLabirinto(char[][] labirinto, int linhaJogador, int colunaJogador) {
         System.out.println("\n-----------------");
+
+        // Raio de visão do jogador (1 significa que ele vê 1 casa ao redor)
+        int raioVisao = 1;
 
         for (int i = 0; i < labirinto.length; i++) {
             for (int j = 0; j < labirinto[i].length; j++) {
-                System.out.print(labirinto[i][j] + " ");
+
+                // Calcula a distância absoluta da célula atual até o jogador
+                int distanciaLinha = Math.abs(i - linhaJogador);
+                int distanciaColuna = Math.abs(j - colunaJogador);
+
+                // Se estiver dentro do raio de visão, mostra o mapa real
+                if (distanciaLinha <= raioVisao && distanciaColuna <= raioVisao) {
+                    System.out.print(labirinto[i][j] + " ");
+                } else {
+                    // Caso contrário, oculta com um caractere de "névoa"
+                    System.out.print(". ");
+                }
             }
             System.out.println();
         }
@@ -211,7 +224,7 @@ public class Main {
 
         while (!ganhou) {
 
-            desenharLabirinto(labirinto);
+            desenharLabirinto(labirinto, linhaAtual,colunaAtual);
 
             System.out.print("Sua jogada (W/A/S/D): ");
             char comando = scanner.next().toLowerCase().charAt(0);
@@ -231,9 +244,7 @@ public class Main {
                 System.out.println("Comando inválido! Use apenas W, A, S ou D.");
                 continue;
             }
-
-
-                //PARTE QUATRO:
+            //PARTE QUATRO:
             //Verifica se o jogador andou nas posições corretas e substitui a posição atual por "P"
             char destino = labirinto[proximaLinha][proximaColuna];
 
